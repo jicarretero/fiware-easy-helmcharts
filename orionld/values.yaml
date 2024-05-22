@@ -1,0 +1,63 @@
+## 
+# MongoDB configuration to be used as ORION-LD Context Broker databaeº
+mongo:
+  label:
+    name: mongodb-rs
+  dbhost: mongodb
+  dbport: 27017
+
+  # The image -  It is not using the official one. Sometimes, the quotas
+  # to download from dockerhub is exceeded and there might be some problems
+  # I've pushed the image to a self hosted repo.
+  image: dockers.fiware.org/mongo:5.0
+  volume:
+    name: mongodb-volume
+
+    # Use the database volume as a HostPath (if true)
+    isHostPath: false
+
+    # Use the database volume as a Persistent Volume Claim
+    isVolumeClaim: false
+    mountPath: /data/db
+
+    # Host path - used in case we are using Host path as volume
+    hostPath:  /tmp/mongodb-data
+
+    # persistentVolume - in case we set isVolumeClaim to True 
+    claimName: mongo-data-pvc
+    
+    # The next are ready to be deployed - This might be useful
+    # in case of using "HostPath". Specially in K8S Vanilla...
+    selectNode: false
+    node: k8s-node-03
+
+##
+# Orion deployment
+orion:
+  # Use the experimental new feautes (should be true in most cases)
+  experimental: true
+
+  # Orion port's is 1026
+  port: 1026
+
+  # Where to expose this port (80 is quite usual as http service - svc)
+  exposedPort: 80
+
+  # This is not official orionld image, but it is much smaller
+  # and fully functional.
+  image: dockers.fiware.org/orionld-ubuntu2004:1.0.2
+  label:
+    name: orion-ld-rs
+  service:
+    # Service name
+    name: orion-ld-service
+    
+    # The next one is for Vanilla K8S - Defining my own ingress.
+    hostname: orion.xip.io
+  loglevel: DEBUG
+
+##
+# Just in some cases for ingress in k8s vanilla
+ingress: false
+
+    # standard-csi

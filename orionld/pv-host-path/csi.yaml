@@ -1,0 +1,6 @@
+kind: CSIDriver
+metadata:
+  name: csi.mydriver.company.org
+  labels:
+    security.openshift.io/csi-ephemeral-volume-profile: restricted 
+
