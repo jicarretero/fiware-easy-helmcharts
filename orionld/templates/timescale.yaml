@@ -1,0 +1,64 @@
+{{- if .Values.orion.troe }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: timescale
+  labels:
+    name: timescale
+spec:
+  replicas: 1
+  selector:
+    matchLabels: 
+      name: timescale
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      name: timescale
+      labels:
+        name: timescale
+    spec:
+      restartPolicy: Always
+      containers:
+        - name: timescale
+          image: {{ .Values.timescale.image }}
+          hostname: timescale
+          env:
+          - name: POSTGRES_USER
+            value: orion
+          - name: POSTGRES_PASSWORD
+            value: orion
+          - name: POSTGRES_HOST_AUTH_METHOD
+            value: trust
+          volumeMounts:
+            - name: {{ .Values.timescale.volume.name }}
+              mountPath: {{ .Values.timescale.volume.mountPath }}
+          ports:
+            - containerPort: {{ .Values.timescale.port }}
+      volumes:
+        - name: {{ .Values.timescale.volume.name }}
+          {{- if .Values.timescale.volume.isHostPath }}
+          hostPath:
+            path: {{ .Values.timescale.volume.hostPath }}
+          {{- else if .Values.timescale.volume.isVolumeClaim }}
+          persistentVolumeClaim:
+            claimName: {{ .Values.timescale.volume.claimName }}
+          {{- else }}
+          emptyDir: {}
+          {{- end}}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: timescale
+  labels:
+    name: timescale
+spec:
+  type: ClusterIP
+  selector:
+    name: timescale
+  ports:
+    - name: timescale
+      port: {{ .Values.timescale.port }}
+      protocol: TCP
+{{- end }}

@@ -1,16 +1,16 @@
 apiVersion: v2
-name: orion-ld
-version: 0.2.0
+name: mosquitto-mqtt
+version: 0.1.0
 appVersion: 0.1.0
 kubeVersion: '>= 1.19-0'
-home: https://github.com/FIWARE/context.Orion-LD
+home: https://mosquitto.org
 description: A simple helm chart to show "running" this in Kubernetes.
 keywords:
 - fiware
-- orion-ld
-- orion
+- mqtt
+- mosquitto
 sources:
-- https://github.com/FIWARE/context.Orion-LD
+- https://github.com/eclipse-mosquitto/mosquitto
 maintainers:
 - name: Jose Ignacio Carretero
   email: joseignacio.carretero@fiware.org

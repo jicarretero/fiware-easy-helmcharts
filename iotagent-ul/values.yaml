@@ -1,0 +1,23 @@
+## 
+iotagent_ul:
+  label:
+    name: iotagent_json
+  iota_httpport: 7896
+  iota_node_httpport: 31896
+  iota_url_port: 4041
+  iota_url_node_port: 31041
+  iota_url: http://iotagent-ul:4041
+  iota_default_resource: /iot/json
+  allow_anonymous: true
+  image: quay.io/fiware/iotagent-ul:latest
+  cpu_requests: 50m
+  cpu_limit: 500m
+  memory_limit: 256Mi
+  mongodb_host: mongodb
+  mongodb_db: iotagentul
+  orionld_host: orion-ld-service
+  orionld_port: 80
+  iota_ld_context: http://context/user-context.jsonld
+  mqtt_host: mosquitto
+  mqtt_port: 1883
+  mqtt_topic: examples/ul

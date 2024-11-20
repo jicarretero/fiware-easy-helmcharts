@@ -1,0 +1,21 @@
+## 
+# Mosquitto MQTT configuration
+iotagent_json:
+  label:
+    name: iotagent_json
+  iota_httpport: 7896
+  iota_node_httpport: 30896
+  iota_url_port: 4041
+  iota_url_node_port: 30041
+  iota_url: http://iotagent-json:4041
+  iota_default_resource: /iot/json
+  allow_anonymous: true
+  image: quay.io/fiware/iotagent-json:latest
+  cpu_requests: 50m
+  cpu_limit: 500m
+  memory_limit: 256Mi
+  mongodb_host: mongodb
+  mongodb_db: iotagentjson
+  orionld_host: orion-ld-service
+  orionld_port: 80
+  iota_ld_context: http://context/user-context.jsonld

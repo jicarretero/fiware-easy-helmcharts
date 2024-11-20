@@ -18,10 +18,20 @@ spec:
         name: {{ .Values.orion.label.name }}
     spec:
       restartPolicy: Always
-      hostname: orion-ld
       containers:
         - name: orion-ld
           image: {{ .Values.orion.image }}
+          {{- if .Values.orion.troe }}
+          env:
+          - name: ORIONLD_TROE
+            value: "TRUE"
+          - name: ORIONLD_TROE_USER
+            value: {{ .Values.timescale.username }}
+          - name: ORIONLD_TROE_PWD
+            value: {{ .Values.timescale.password }}
+          - name: ORIONLD_TROE_HOST
+            value: {{ .Values.timescale.service_name }}
+          {{- end}}
           args: 
             - -dbhost
             - {{ .Values.mongo.dbhost }}
@@ -29,6 +39,9 @@ spec:
             - {{ .Values.orion.loglevel }}
             {{- if .Values.orion.experimental }}
             - -experimental
+            {{- end }}
+            {{- if .Values.orion.troe }}
+            - -troe
             {{- end }}
           ports:
             - containerPort: {{ .Values.orion.port }}
