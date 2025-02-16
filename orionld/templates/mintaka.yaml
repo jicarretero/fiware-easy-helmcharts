@@ -22,6 +22,8 @@ spec:
       containers:
         - name: timescale
           image: {{ .Values.mintaka.image }}
+          ports:
+          - containerPort: {{ .Values.mintaka.port }}
           env:
           - name: DATASOURCES_DEFAULT_HOST
             value: timescale
@@ -31,8 +33,12 @@ spec:
             value: {{ .Values.timescale.password }}
           - name: DATASOURCES_DEFAULT_DATABASE
             value: orion
-          ports:
-            - containerPort: {{ .Values.mintaka.port }}
+          - name: MICRONAUT_SERVER_HOST
+            value: "0.0.0.0"
+          - name: MICRONAUT_SERVER_PORT
+            value: "8080"
+          - name: JAVA_OPTS
+            value: "-Djava.net.preferIPv4Stack=true"
 
 ---
 apiVersion: v1
@@ -42,12 +48,30 @@ metadata:
   labels:
     app: mintaka
 spec:
-  type: NodePort
+  type: ClusterIP
   selector:
-    app: mintaka
+    name: mintaka
   ports:
   - port: {{ .Values.mintaka.port }}
-    nodePort: {{ .Values.mintaka.nodePort }}
     protocol: TCP
     name: mintaka-port
 {{- end }}
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: mmintaka
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: mintaka.k8s.fiware.org
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: mintaka
+            port: 
+              number: 8080

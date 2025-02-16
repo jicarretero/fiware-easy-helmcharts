@@ -1,0 +1,45 @@
+{{- if .Values.vault_server.deploy }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.vault_server.label.name }}
+  labels:
+    name: {{ .Values.vault_server.label.name }}
+spec:
+  selector:
+    matchLabels:
+      name: {{ .Values.vault_server.label.name }}
+  template:
+    metadata:
+      labels:
+        name: {{ .Values.vault_server.label.name }}
+    spec:
+      containers:
+      - name: {{ .Values.vault_server.service.name }}
+        image: {{ .Values.vault_server.image }}
+        securityContext:
+          privileged: false
+          capabilities:
+            add: ["IPC_LOCK"]
+        env:
+        - name: VAULT_ADDRESS
+          value: "{{ .Values.vault_server.env.VAULT_ADDRESS }}"
+        - name: VAULT_DEV_ROOT_TOKEN_ID
+          value: "{{ .Values.vault_server.env.VAULT_DEV_ROOT_TOKEN_ID }}"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.vault_server.service.name }}
+  labels:
+    name: {{ .Values.vault_server.label.name }}
+spec:
+  type: ClusterIP
+  selector:
+      name: {{ .Values.vault_server.service.name }}
+  ports:
+  - port: {{ .Values.vault_server.port }}
+    protocol: TCP
+    name: {{ .Values.vault_server.portName }}
+{{- end }}

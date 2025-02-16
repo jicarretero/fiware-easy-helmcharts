@@ -11,33 +11,31 @@ mongo:
     mountPath: /data/db
 
     # Host path - used in case we are using Host path as volume
-    hostPath:  /tmp/mongodb-data
+    hostPath: /tmp/mongodb-data
 
-    # persistentVolume - in case we set isVolumeClaim to True 
+    # persistentVolume - in case we set isVolumeClaim to True
     claimName: mongo-data-pvc
-    
+
     # The next are ready to be deployed
     selectNode: false
     node: k8s-node-03
-
 
 orion:
   experimental: true
   port: 1026
   exposedPort: 80
-  # image: quay.io/fiware/orion-ld:latest
-  image: dockers.fiware.org/orionld-ubuntu2004
+  image: dockers.fiware.org/orionld-ubuntu2004:1.0.2
   label:
     name: orion-ld-rs
   service:
     name: orion-ld-service
-    
-    # The next one is for Vanilla K8S - Defining my own ingress.
-    hostname: orion.xip.io
-  loglevel: DEBUG
-  troe: true
 
-ingress: false
+    # The next one is for Vanilla K8S - Defining my own ingress.
+    hostname: orion.k8s.fiware.org
+  loglevel: DEBUG
+  troe: false
+
+ingress: true
 
 timescale:
   port: 5432
@@ -53,11 +51,11 @@ timescale:
     mountPath: /var/lib/postgresql
 
     # Host path - used in case we are using Host path as volume
-    hostPath:  /tmp/timescale-data
+    hostPath: /tmp/timescale-data
 
-    # persistentVolume - in case we set isVolumeClaim to True 
+    # persistentVolume - in case we set isVolumeClaim to True
     claimName: timescale-data-pvc
-    
+
     # The next are ready to be deployed
     selectNode: false
     node: k8s-node-03
@@ -65,7 +63,7 @@ timescale:
 mintaka:
   port: 8080
   nodePort: 30880
-  installMintaka: true
+  installMintaka: false
   dasource_host: timescale
   datasource_username: orion
   datasource_password: orion

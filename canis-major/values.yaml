@@ -1,0 +1,87 @@
+canis_major:
+  deploy: trye
+  label:
+    name: canis-major
+  deploy_cm_forward_proxy: True
+  image: quay.io/fiware/canis-major
+  service:
+    name: canis-major
+  port: 4000
+  nodePort: 31400
+  env:
+    MICRONAUT_SERVER_PORT: "4000"
+    MICRONAUT_HTTP_SERVICES_NGSI_URL: "http://orion-ld-service.orion.svc.cluster.local"
+    MICRONAUT_HTTP_SERVICES_NGSI_PATH: ngsi-ld/v1
+    # Ununderstandable
+    ETHEREUM_CONTRACT_ADDRESS: 0x476059cd57800db8eb88f67c2aa38a6fcf8251e0
+    ETHEREUM_DLT_ADDRESS: ganache-cli:8545
+    GENERAL_NGSI_TENANT: orion
+    DEFAULT_ACCOUNT_ENABLED: true
+    # default key derived from the mnemonic in the test definition
+    DEFAULT_ACCOUNT_PRIVATE_KEY: 0x82AC43A26ae509eEf217330C7d862F822fF0CECB
+
+cm_forward_proxy:
+  deploy: false
+  label:
+    name: cm-forward-proxy
+  image: quay.io/fiware/cm-forward-proxy:1.3.0-PRE-40
+  service:
+    name: cm-forward-proxy
+  port: 15001
+
+ganache_cli:
+  deploy: true
+  service:
+    name: ganache-cli
+  label:
+    name: ganache-cli
+  image: trufflesuite/ganache-cli:latest
+  command: ganache-cli -l 8000000 --gasPrice 0 --account '0x22aabb811efca4e6f4748bd18a46b502fa85549df9fa07da649c0a148d7d5530, 100000000000000000000'
+  port: 8545
+  nodePort: 30545
+  portName: ganache-cli-port
+
+vault_server:
+  deploy: true
+  service:
+    name: vault
+  label:
+    name: vault
+  image: quay.io/fiware/vault-ethereum:1.0.1
+  port: 8200
+  nodePort: 30200
+  portName: vault-server-port
+  env:
+    VAULT_ADDRESS: "http://0.0.0.0:8200"
+    VAULT_DEV_ROOT_TOKEN_ID: "vault-plaintext-root-token"
+
+aei_contract:
+  deploy: true
+  service:
+    name: aei-contract
+  label:
+    name: aei-contract
+  image: quay.io/wi_stefan/py-contract:latest
+  env:
+    RPC_ENDPOINT: ganache-cli
+    RPC_PORT: 8545
+
+  # cap_add:
+  #   - IPC_LOCK
+#  #  ###
+#  volume:
+#    name: mongodb-volume
+#    isHostPath: false
+#    isVolumeClaim: false
+#    mountPath: /data/db
+#
+#    # Host path - used in case we are using Host path as volume
+#    hostPath: /tmp/mongodb-data
+#
+#    # persistentVolume - in case we set isVolumeClaim to True
+#    claimName: mongo-data-pvc
+#
+#    # The next are ready to be deployed
+#    selectNode: false
+#    node: k8s-node-03
+

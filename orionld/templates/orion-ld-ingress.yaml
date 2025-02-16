@@ -13,7 +13,7 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: orion-ld-service
+            name: {{ .Values.orion.service.name }}
             port: 
               number: 1026
 {{- end }}

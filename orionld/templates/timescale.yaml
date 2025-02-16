@@ -22,7 +22,6 @@ spec:
       containers:
         - name: timescale
           image: {{ .Values.timescale.image }}
-          hostname: timescale
           env:
           - name: POSTGRES_USER
             value: orion
