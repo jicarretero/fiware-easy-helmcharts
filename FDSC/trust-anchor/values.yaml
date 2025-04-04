@@ -1,0 +1,19 @@
+til:
+  label:
+    app: trusted-issuers-list
+  name: trusted-issuers-list
+  image: "quay.io/fiware/trusted-issuers-list:0.0.2"
+  jdbc_connection: "jdbc:mysql//localhost:3306/tirdb"
+  SERVER_PORT: 8080
+  ENDPOINTS_ALL_PORT: 9090
+
+mysql:
+  label:
+    name: mysql
+  dbport: 3306
+  image: dockers.fiware.org/mysql:8.0
+  volume:
+    name: mysql-volume
+    isHostPath: false
+    isVolumeClaim: false
+    mountPath: /var/lib/mysql

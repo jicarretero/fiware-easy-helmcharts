@@ -1,4 +1,4 @@
-{{- if .Values.orion.troe }}
+{{- if .Values.timescale.enabled }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -35,7 +35,7 @@ spec:
           ports:
             - containerPort: {{ .Values.timescale.port }}
       volumes:
-{{- if .Values.mongo.persistence.enabled }}
+{{- if .Values.timescale.persistence.enabled }}
         - name: {{ .Values.timescale.volume.name }}
           persistentVolumeClaim:
             claimName: {{ .Values.timescale.volume.name }}

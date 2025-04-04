@@ -1,18 +1,18 @@
-{{- if .Values.ingress }}
+---
+# Source: orion-ld/templates/orion-ld-ingress.yaml
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: {{ .Values.orion.service.name }}
+  name: orion-ld-service
 spec:
   rules:
-  - host: {{ .Values.orion.service.hostname }}
+  - host: orionld.apps-crc.testing
     http:
       paths:
       - path: /
         pathType: Prefix
         backend:
           service:
-            name: {{ .Values.orion.service.name }}
+            name: orion-ld-service
             port: 
               number: 1026
-{{- end }}

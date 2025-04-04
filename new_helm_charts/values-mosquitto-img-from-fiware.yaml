@@ -1,0 +1,5 @@
+##
+# Mosquitto MQTT configuration
+mosquitto:
+  image: dockers.fiware.org/eclipse-mosquitto:2.0
+  memory_limit: 256Mi

@@ -1,0 +1,16 @@
+apiVersion: v2
+name: iotagent-json
+version: 0.2.0
+appVersion: 0.1.0
+kubeVersion: '>= 1.19-0'
+home: https://github.com/telefonicaid/iotagent-json
+description: A simple helm chart to show "running" this in Kubernetes.
+keywords:
+- fiware
+- iot-agent
+- json
+sources:
+- https://github.com/telefonicaid/iotagent-json
+maintainers:
+- name: Jose Ignacio Carretero
+  email: joseignacio.carretero@fiware.org

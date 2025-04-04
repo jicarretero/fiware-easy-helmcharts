@@ -1,5 +1,5 @@
 canis_major:
-  deploy: trye
+  deploy: true
   label:
     name: canis-major
   deploy_cm_forward_proxy: True
@@ -28,6 +28,23 @@ cm_forward_proxy:
   service:
     name: cm-forward-proxy
   port: 15001
+  env:
+    NGSILD_BROKER_URL: "http://localhost:1026"
+    CANIS_MAJOR_URL: "http://localhost:4000"
+    DUMP_AS_CURL: "no"
+
+muliphein:
+  deploy: false
+  label:
+    name: muliphein
+  image: dockers.fiware.org/muliphein:0.5.6
+  service:
+    name: muliphein
+  port: 8080
+  nodePort: 15001
+  env:
+    NGSILD_BROKER_URL: "http://localhost:1026"
+    CANIS_MAJOR_URL: "http://localhost:4000"
 
 ganache_cli:
   deploy: true

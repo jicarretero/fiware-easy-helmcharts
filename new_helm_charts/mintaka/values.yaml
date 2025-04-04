@@ -1,0 +1,16 @@
+mintaka:
+  enabled: true
+  port: 8080
+  nodePort: 30880
+  installMintaka: false
+  dasource_host: timescale
+  datasource_username: orion
+  datasource_password: orion
+  image: quay.io/fiware/mintaka:latest
+  service:
+    hostname: mintaka.k8s.fiware.org
+  ingress: true
+  timescale:
+    service_name: timescale
+    username: orion
+    password: orion

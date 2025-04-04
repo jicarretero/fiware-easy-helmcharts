@@ -1,0 +1,22 @@
+mongo:
+  enabled: true
+  label:
+    name: mongodb-rs
+  deployment:
+    name: mongodb
+  dbhost: mongodb
+  dbport: 27017
+  image: mongo:5.0
+  persistence:
+    enabled: true
+    storageClassName: crc-csi-hostpath-provisioner
+    storage: "1Gi"
+  volume:
+    name: mongodb-volume
+    mountPath: /data/db
+
+    # persistentVolume - in case we set isVolumeClaim to True
+    claimName: mongo-data-pvc
+  service:
+     name: mongodb
+

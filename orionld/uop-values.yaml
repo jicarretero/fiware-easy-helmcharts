@@ -1,0 +1,9 @@
+mongo:
+  image: dockers.fiware.org/mongo:5.0
+orion:
+  troe: true
+  service:
+    hostname: orionld.apps-crc.testing
+mintaka:
+  service:
+    hostname: mintaka.apps-crc.testing

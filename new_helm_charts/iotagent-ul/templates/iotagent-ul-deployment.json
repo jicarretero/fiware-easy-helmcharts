@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: iotagent-ul
+spec:
+  selector:
+    matchLabels:
+      app: iotagent-ul
+  template:
+    metadata:
+      labels:
+        app: iotagent-ul
+    spec:
+      containers:
+      - name: iotagent-ul
+        image: {{ .Values.iotagent_ul.image }}
+        env:
+        - name: IOTA_CB_HOST
+          value: "{{ .Values.iotagent_ul.orionld_host }}"
+        - name: IOTA_CB_PORT
+          value: "{{ .Values.iotagent_ul.orionld_port }}"
+        - name: IOTA_NORTH_PORT
+          value: "{{ .Values.iotagent_ul.iota_url_port }}"
+        - name: IOTA_REGISTRY_TYPE
+          value: mongodb
+        - name: IOTA_LOG_LEVEL
+          value: DEBUG
+        - name: IOTA_TIMESTAMP
+          value: "true"
+        - name: IOTA_CB_NGSI_VERSION
+          value: ld
+        - name: IOTA_AUTOCAST
+          value: "true"
+        - name: IOTA_MONGO_HOST
+          value: "{{ .Values.iotagent_ul.mongodb_host }}"
+        - name: IOTA_MONGO_PORT
+          value: "27017"
+        - name: IOTA_MONGO_DB
+          value: "{{ .Values.iotagent_ul.mongodb_db }}"
+        - name: IOTA_HTTP_PORT
+          value: "{{ .Values.iotagent_ul.iota_httpport }}"
+        - name: IOTA_PROVIDER_URL
+          value: "{{ .Values.iotagent_ul.iota_url }}"
+        - name: IOTA_DEFAULT_RESOURCE
+          value: "{{ .Values.iotagent_ul.iota_default_resource }}"
+        - name: IOTA_JSON_LD_CONTEXT
+          value: "{{ .Values.iotagent_ul.iota_ld_context }}"
+        - name: IOTA_FALLBACK_TENANT
+          value: openiot
+        - name: IOTA_MULTI_CORE
+          value: "true"
+        - name: IOTA_MQTT_HOST
+          value: "{{ .Values.iotagent_ul.mqtt_host }}"
+        - name: IOTA_MQTT_PORT
+          value: "{{ .Values.iotagent_ul.mqtt_port }}"
+        # resources:
+        #  requests:
+        #    cpu: "{{ .Values.iotagent_ul.cpu_requests }}"
+        #  limits:
+        #    memory: "{{ .Values.iotagent_ul.memory_limit }}"
+        #    cpu: "{{ .Values.iotagent_ul.cpu_limit }}"
+        ports:
+        - containerPort: {{ .Values.iotagent_ul.iota_url_port }}
+        - containerPort: {{ .Values.iotagent_ul.iota_httpport }}

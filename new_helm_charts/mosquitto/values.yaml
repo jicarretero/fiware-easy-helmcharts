@@ -1,10 +1,11 @@
 ##
 # Mosquitto MQTT configuration
 mosquitto:
+  enabled: true
   label:
     name: mosquitto
   port: 1883
-  nodePort: 31883
+  nodePort: 30883
   allow_anonymous: true
   image: eclipse-mosquitto:2.0
   cpu_requests: 50m

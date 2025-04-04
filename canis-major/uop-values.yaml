@@ -1,0 +1,20 @@
+vault_server:
+  deploy: false
+
+canis_major:
+  env:
+    MICRONAUT_HTTP_SERVICES_NGSI_URL: http://orion-ld-service.uop-fiware-deployments.svc.cluster.local
+
+cm_forward_proxy:
+  deploy: false
+  env:
+    NGSILD_BROKER_URL: "orion-ld-service.uop-fiware-deployments.svc.cluster.local"
+    CANIS_MAJOR_URL: "canis-major.uop-fiware-canis-major.svc.cluster.local"
+
+muliphein:
+  deploy: true
+  env:
+    NGSILD_BROKER_URL: "http://orion-ld-service.uop-fiware-deployments.svc.cluster.local:1026"
+    CANIS_MAJOR_URL: "http://canis-major.uop-fiware-canis-major.svc.cluster.local:4000"
+    DUMP_AS_CURL: "yes"
+  image: dockers.fiware.org/muliphein:0.5.6

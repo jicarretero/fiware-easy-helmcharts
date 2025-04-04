@@ -3,7 +3,11 @@ mongo:
     name: mongodb-rs
   dbhost: mongodb
   dbport: 27017
-  image: dockers.fiware.org/mongo:5.0
+  image: mongo:5.0
+  persistence:
+    enabled: true
+    storageClassName: crc-csi-hostpath-provisioner
+    storage: "1Gi"
   volume:
     name: mongodb-volume
     isHostPath: false
@@ -23,8 +27,8 @@ mongo:
 orion:
   experimental: true
   port: 1026
-  exposedPort: 80
-  image: dockers.fiware.org/orionld-ubuntu2004:1.0.2
+  exposedPort: 1026
+  image: quay.io/fiware/orion-ld
   label:
     name: orion-ld-rs
   service:
@@ -33,7 +37,7 @@ orion:
     # The next one is for Vanilla K8S - Defining my own ingress.
     hostname: orion.k8s.fiware.org
   loglevel: DEBUG
-  troe: false
+  troe: falseº
 
 ingress: true
 
@@ -44,6 +48,10 @@ timescale:
   service_name: timescale
   username: orion
   password: orion
+  persistence:
+    enabled: true
+    storageClassName: crc-csi-hostpath-provisioner
+    storage: "1Gi"
   volume:
     name: timescale-volume
     isHostPath: false
@@ -68,3 +76,5 @@ mintaka:
   datasource_username: orion
   datasource_password: orion
   image: quay.io/fiware/mintaka:latest
+  service:
+    hostname: mintaka.k8s.fiware.org

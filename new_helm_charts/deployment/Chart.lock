@@ -1,0 +1,27 @@
+dependencies:
+- name: orion-ld
+  repository: file://../orionld
+  version: 0.2.0
+- name: mongodb
+  repository: file://../mongodb
+  version: 0.2.0
+- name: mongodb
+  repository: file://../mongodb
+  version: 0.2.0
+- name: timescale
+  repository: file://../timescale
+  version: 0.2.0
+- name: mintaka
+  repository: file://../mintaka
+  version: 0.2.0
+- name: mosquitto
+  repository: file://../mosquitto
+  version: 0.2.0
+- name: iotagent-json
+  repository: file://../iotagent-json
+  version: 0.2.0
+- name: iotagent-ul
+  repository: file://../iotagent-ul
+  version: 0.2.0
+digest: sha256:504adfc99f9b50b1de06e1428fd557f5101eb4a7ca5b74268fb4dda65702e50f
+generated: "2025-04-04T11:38:27.245475479Z"

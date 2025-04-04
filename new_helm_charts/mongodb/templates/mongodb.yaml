@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: mongodb
+  name: {{ .Values.mongo.deployment.name }}
   labels:
     name: {{ .Values.mongo.label.name }}
 spec:
@@ -24,6 +24,7 @@ spec:
       containers:
         - name: mongo-db
           image: {{ .Values.mongo.image }}
+          imagePullPolicy: IfNotPresent
           args: ["--nojournal"]
           volumeMounts:
             - name: {{ .Values.mongo.volume.name }}
@@ -65,7 +66,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: mongodb
+  name: {{ .Values.mongo.service.name }}
   labels:
     name: {{ .Values.mongo.label.name }}
 spec:

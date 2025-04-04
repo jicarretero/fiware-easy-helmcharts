@@ -1,0 +1,45 @@
+apiVersion: v2
+name: fiware-easy-deployment
+version: 0.2.0
+appVersion: 0.1.0
+kubeVersion: '>= 1.19-0'
+home: https://github.com/FIWARE/context.Orion-LD
+description: A simple helm chart to show "running" this in Kubernetes.
+maintainers:
+- name: Jose Ignacio Carretero
+  email: joseignacio.carretero@fiware.org
+dependencies:
+  - name: orion-ld
+    version: "0.2.0"
+    repository: "file://../orionld"
+    condition: orionld.enabled
+  - name: mongodb
+    version: "0.2.0"
+    repository: "file://../mongodb"
+    alias: mongodb-orionld
+    condition: orionld-mongodb.enabled
+  - name: mongodb
+    version: "0.2.0"
+    repository: "file://../mongodb"
+    alias: mongodb-iotajson
+    condition: mongodb-iotajson.enabled
+  - name: timescale
+    version: "0.2.0"
+    repository: "file://../timescale"
+    condition: timescale.enabled
+  - name: mintaka
+    version: "0.2.0"
+    repository: "file://../mintaka"
+    condition: mintaka.enabled
+  - name: mosquitto
+    version: "0.2.0"
+    repository: "file://../mosquitto"
+    condition: mosquitto.enabled
+  - name: iotagent-json
+    version: "0.2.0"
+    repository: "file://../iotagent-json"
+    condition: iotagent-json.enabled
+  - name: iotagent-ul
+    version: "0.2.0"
+    repository: "file://../iotagent-ul"
+    condition: iotagent-ul.enabled

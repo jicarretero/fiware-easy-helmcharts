@@ -1,0 +1,16 @@
+apiVersion: v2
+name: mosquitto
+version: 0.2.0
+appVersion: 0.1.0
+kubeVersion: '>= 1.19-0'
+home: https://mosquitto.org
+description: A simple helm chart to show "running" this in Kubernetes.
+keywords:
+- fiware
+- mqtt
+- mosquitto
+sources:
+- https://github.com/eclipse-mosquitto/mosquitto
+maintainers:
+- name: Jose Ignacio Carretero
+  email: joseignacio.carretero@fiware.org

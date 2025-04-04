@@ -1,0 +1,177 @@
+{{ if .Values.cm_forward_proxy.deploy }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.cm_forward_proxy.label.name }}
+  labels:
+    name: {{ .Values.cm_forward_proxy.label.name }}
+spec:
+  selector:
+    matchLabels:
+      name: {{ .Values.cm_forward_proxy.label.name }}
+  template:
+    metadata:
+      labels:
+        name: {{ .Values.cm_forward_proxy.label.name }}
+    spec:
+      containers:
+      - name: {{ .Values.cm_forward_proxy.service.name }}
+        image: {{ .Values.cm_forward_proxy.image }}
+        volumeMounts:
+          - name: envoy-yaml-config
+            mountPath: /etc/envoy/envoy.yaml
+            subPath: envoy.yaml
+          - name: listener-yaml-config
+            mountPath: /etc/envoy/listener.yaml
+            subPath: listener.yaml
+          - name: cluster-yaml-config
+            mountPath: /etc/envoy/cluster.yaml
+            subPath: cluster.yaml
+      volumes:
+        - name: envoy-yaml-config
+          configMap:
+            name: envoy-yaml-config
+        - name: listener-yaml-config
+          configMap:
+            name: listener-yaml-config
+        - name: cluster-yaml-config
+          configMap:
+            name: cluster-yaml-config
+  
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.cm_forward_proxy.service.name }}
+  labels:
+    name: {{ .Values.cm_forward_proxy.label.name }}
+spec:
+  type: ClusterIP
+  selector:
+      name: {{ .Values.cm_forward_proxy.label.name }}
+  ports:
+  - port: {{ .Values.cm_forward_proxy.port }}
+    protocol: TCP
+    name: {{ .Values.cm_forward_proxy.portName }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cluster-yaml-config
+data:
+  cluster.yaml: |-
+    resources:
+      - "@type": type.googleapis.com/envoy.config.cluster.v3.Cluster
+        name: canis-major
+        type: STRICT_DNS
+        connect_timeout: 1s
+        lb_policy: ROUND_ROBIN
+        load_assignment:
+          cluster_name: canis-major
+          endpoints:
+            - lb_endpoints:
+                - endpoint:
+                    address:
+                      socket_address:
+                        protocol: TCP
+                        address: {{ .Values.cm_forward_proxy.env.CANIS_MAJOR_URL }}
+                        port_value: 4000
+      
+      - "@type": type.googleapis.com/envoy.config.cluster.v3.Cluster
+        name: orion
+        type: STRICT_DNS
+        connect_timeout: 1s
+        lb_policy: ROUND_ROBIN
+        load_assignment:
+          cluster_name: orion
+          endpoints:
+            - lb_endpoints:
+                - endpoint:
+                    address:
+                      socket_address:
+                        protocol: TCP
+                        address: {{ .Values.cm_forward_proxy.env.NGSILD_BROKER_URL }}
+                        port_value: 80
+      - "@type": type.googleapis.com/envoy.config.cluster.v3.Cluster
+        name: passthrough
+        type: ORIGINAL_DST
+        lbPolicy: CLUSTER_PROVIDED
+        connectTimeout: 10s
+        original_dst_lb_config:
+          use_http_header: true
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: envoy-yaml-config
+data:
+  envoy.yaml: |-
+    node:
+      cluster: passthrough
+      id: envoy-node
+    dynamic_resources:
+      cds_config:
+        path: /etc/envoy/cluster.yaml
+      lds_config:
+        path: /etc/envoy/listener.yaml
+    layered_runtime:
+      layers:
+      - name: static-layer
+        static_layer:
+          envoy:
+            reloadable_features:
+              experimental_matching_api: true 
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: listener-yaml-config
+data:
+  listener.yaml: |-
+    resources:
+      - "@type": type.googleapis.com/envoy.config.listener.v3.Listener
+        name: envoy_listener
+        address:
+          socket_address:
+            address: 0.0.0.0
+            port_value: 15001
+        traffic_direction: INBOUND
+        listener_filters:
+          - name: envoy.filters.listener.original_dst
+        filter_chains:
+          - name: http_chain
+            filters:
+              - name: envoy.filters.network.http_connection_manager
+                typed_config:
+                  "@type": type.googleapis.com/envoy.extensions.filters.network.http_connection_manager.v3.HttpConnectionManager
+                  stat_prefix: ingress_http
+                  codec_type: AUTO
+                  route_config:
+                    name: local_route
+                    virtual_hosts:
+                      - name: cm
+                        domains:
+                          - "{{ .Values.cm_forward_proxy.env.NGSILD_BROKER_URL }}"
+                        routes:
+                          - match:
+                              prefix: "/"
+                            route:
+                              cluster: orion
+                  http_filters:
+                    - name: envoy.filters.http.wasm
+                      typed_config:
+                        "@type": type.googleapis.com/envoy.extensions.filters.http.wasm.v3.Wasm
+                        config:
+                          configuration:
+                            "@type": "type.googleapis.com/google.protobuf.StringValue"
+                            value: |
+                              {"canisMajorCluster":"canis-major", "strict": false}
+                          vm_config:
+                            runtime: "envoy.wasm.runtime.v8"
+                            code:
+                              local:
+                                filename: "/cm-forward-filter/cm-forward-filter.wasm"
+                    - name: envoy.filters.http.router
+                      typed_config: { }
+{{- end }}

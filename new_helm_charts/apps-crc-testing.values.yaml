@@ -1,0 +1,23 @@
+mongodb-iotajson:
+  enabled: false
+
+ioagent-json:
+  enabled: false
+
+orion-ld:
+  enabled: true
+  orionld:
+    ingress:
+      host: orionld.apps-crc.testing
+
+mongodb-orionld:
+  enabled: true
+  mongodb:
+    volume:
+      name: mongodb-orionld-volume
+
+mosquitto:
+  enabled: true
+  mosquitto:
+    nodePort: 30883
+  

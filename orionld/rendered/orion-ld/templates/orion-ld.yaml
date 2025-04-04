@@ -1,0 +1,60 @@
+---
+# Source: orion-ld/templates/orion-ld.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: orion-ld-service
+  labels:
+    name: orion-ld-rs
+spec:
+  type: ClusterIP
+  selector:
+    name: orion-ld-rs
+  ports:
+    - name: ngsild
+      port: 1026
+      targetPort: 1026
+      protocol: TCP
+---
+# Source: orion-ld/templates/orion-ld.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: orion-ld
+  labels:
+    name: orion-ld-rs
+spec:
+  replicas: 1
+  selector:
+    matchLabels: 
+      name: orion-ld-rs
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      name: orion-ld
+      labels:
+        name: orion-ld-rs
+    spec:
+      restartPolicy: Always
+      containers:
+        - name: orion-ld
+          image: quay.io/fiware/orion-ld
+          env:
+          - name: ORIONLD_TROE
+            value: "TRUE"
+          - name: ORIONLD_TROE_USER
+            value: orion
+          - name: ORIONLD_TROE_PWD
+            value: orion
+          - name: ORIONLD_TROE_HOST
+            value: timescale
+          args: 
+            - -dbhost
+            - mongodb
+            - -logLevel
+            - DEBUG
+            - -experimental
+            - -troe
+          ports:
+            - containerPort: 1026

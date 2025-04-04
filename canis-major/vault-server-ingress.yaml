@@ -3,7 +3,6 @@ kind: Ingress
 metadata:
   name: vault
 spec:
-  ingressClassName: nginx
   rules:
     - host: vault-server.k8s.fiware.org
       http:

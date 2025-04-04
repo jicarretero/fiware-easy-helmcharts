@@ -1,0 +1,50 @@
+orion-ld:
+  enabled: true
+  orionld:
+    label:
+      name: orionld-p2code
+    image: quay.io/fiware/orion-ld:1.9.0
+    mongodb:
+      host: orionld-mongodb
+
+
+_mongodb_common: &mongodb_common
+  mongo:
+    image: dockers.fiware.org/mongo:5.0
+
+mongodb-orionld:
+  enabled: true
+  <<: *mongodb_common
+  mongo:
+    deployment:
+      name: orionld-mongodb
+    service:
+      name: orionld-mongodb
+    volume:
+      name: mongodb-orionld-data-volume
+
+mongodb-iotajson:
+  enabled: true
+  <<: *mongodb_common
+  mongo:
+    deployment:
+      name: iotajson-mongodb
+    service:
+      name: iotajson-mongodb
+    volume:
+      name: mongodb-iotajson-data-volume
+
+mintaka:
+  enabled: false
+
+timescale:
+  enabled: false
+
+mosquitto:
+  enabled: true
+
+iotagent-json:
+  enabled: false
+
+iotagent-ul:
+  enabled: false
