@@ -1,30 +1,4 @@
-mongo:
-  label:
-    name: mongodb-rs
-  dbhost: mongodb
-  dbport: 27017
-  image: mongo:5.0
-  persistence:
-    enabled: true
-    storageClassName: crc-csi-hostpath-provisioner
-    storage: "1Gi"
-  volume:
-    name: mongodb-volume
-    isHostPath: false
-    isVolumeClaim: false
-    mountPath: /data/db
-
-    # Host path - used in case we are using Host path as volume
-    hostPath: /tmp/mongodb-data
-
-    # persistentVolume - in case we set isVolumeClaim to True
-    claimName: mongo-data-pvc
-
-    # The next are ready to be deployed
-    selectNode: false
-    node: k8s-node-03
-
-orion:
+orionld:
   experimental: true
   port: 1026
   exposedPort: 1026
@@ -33,48 +7,14 @@ orion:
     name: orion-ld-rs
   service:
     name: orion-ld-service
-
-    # The next one is for Vanilla K8S - Defining my own ingress.
     hostname: orion.k8s.fiware.org
   loglevel: DEBUG
-  troe: falseº
-
-ingress: true
-
-timescale:
-  port: 5432
-  host_auth_method: trust
-  image: timescale/timescaledb-postgis:latest-pg12
-  service_name: timescale
-  username: orion
-  password: orion
-  persistence:
+  troe: false
+  ingress:
     enabled: true
-    storageClassName: crc-csi-hostpath-provisioner
-    storage: "1Gi"
-  volume:
-    name: timescale-volume
-    isHostPath: false
-    isVolumeClaim: false
-    mountPath: /var/lib/postgresql
+    host: k8s.fiware.org
+  mongodb:
+    enabled: true
+    host: mongodb
 
-    # Host path - used in case we are using Host path as volume
-    hostPath: /tmp/timescale-data
-
-    # persistentVolume - in case we set isVolumeClaim to True
-    claimName: timescale-data-pvc
-
-    # The next are ready to be deployed
-    selectNode: false
-    node: k8s-node-03
-
-mintaka:
-  port: 8080
-  nodePort: 30880
-  installMintaka: false
-  dasource_host: timescale
-  datasource_username: orion
-  datasource_password: orion
-  image: quay.io/fiware/mintaka:latest
-  service:
-    hostname: mintaka.k8s.fiware.org
+## May it define value.timescale.xxxx

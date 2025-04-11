@@ -1,5 +1,6 @@
 ## 
 iotagent_ul:
+  enabled: true
   label:
     name: iotagent_json
   iota_httpport: 7896

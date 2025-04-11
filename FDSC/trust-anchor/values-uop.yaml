@@ -1,3 +1,0 @@
-til:
-  ingress: true
-  jdbc_connection: "jdbc:mysql://trust-anchor-mysql:3306/tirdb"
