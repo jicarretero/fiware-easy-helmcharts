@@ -10,11 +10,14 @@ orionld:
     hostname: orion.k8s.fiware.org
   loglevel: DEBUG
   troe: false
+  timescale:
+    username: orion
+    password: orion
+    host: timescale
   ingress:
     enabled: true
     host: k8s.fiware.org
   mongodb:
     enabled: true
     host: mongodb
-
 ## May it define value.timescale.xxxx

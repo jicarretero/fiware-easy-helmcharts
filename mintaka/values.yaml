@@ -7,9 +7,13 @@ mintaka:
   datasource_username: orion
   datasource_password: orion
   image: quay.io/fiware/mintaka:latest
+  label:
+    name: mintaka
   service:
-    hostname: mintaka.k8s.fiware.org
-  ingress: true
+    name: mintaka
+  ingress:
+    enabled: true
+    host: mintaka.k8s.fiware.org
   timescale:
     service_name: timescale
     username: orion

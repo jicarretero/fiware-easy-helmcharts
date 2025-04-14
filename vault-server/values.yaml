@@ -1,0 +1,15 @@
+vault_server:
+  deploy: true
+  service:
+    name: vault
+  label:
+    name: vault
+  image: quay.io/fiware/vault-ethereum:1.0.1
+  port: 8200
+  nodePort: 30200
+  portName: vault-server-port
+  env:
+    VAULT_ADDRESS: "http://0.0.0.0:8200"
+    VAULT_DEV_ROOT_TOKEN_ID: "vault-plaintext-root-token"
+  cap_add:
+    - IPC_LOCK

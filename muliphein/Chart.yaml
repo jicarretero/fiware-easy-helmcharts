@@ -1,9 +1,9 @@
 apiVersion: v2
-name: canis-major
+name: muliphein
 version: 0.2.0
 appVersion: 0.1.0
 kubeVersion: ">= 1.19-0"
-home: https://github.com/FIWARE/CanisMajor.git
+home: https://github.com/jicarretero/muliphein
 description: A simple helm chart to show "running" this in Kubernetes.
 keywords:
   - fiware

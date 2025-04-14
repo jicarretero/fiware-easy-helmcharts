@@ -1,0 +1,15 @@
+muliphein:
+  enabled: true
+  label:
+    name: muliphein
+  image: dockers.fiware.org/muliphein:0.5.6
+  service:
+    name: muliphein
+  port: 8080
+  nodePort: 15001
+  env:
+    NGSILD_BROKER_URL: "http://localhost:1026"
+    CANIS_MAJOR_URL: "http://localhost:4000"
+  ingress:
+    enabled: true
+    host: muliphein.apps-crc.testing

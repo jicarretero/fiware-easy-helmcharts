@@ -1,0 +1,22 @@
+{{- if .Values.ganache_cli.aei_contract.enabled }}
+apiVersion: v1
+kind:  Pod
+metadata:
+  name: {{ .Values.ganache_cli.aei_contract.label.name }}
+spec:
+  containers:
+  - name: {{ .Values.ganache_cli.aei_contract.service.name }}
+    image: {{ .Values.ganache_cli.aei_contract.image }}
+    env:
+    - name: RPC_ENDPOINT
+      value: "{{ .Values.ganache_cli.service.name }}"
+    - name: RPC_PORT
+      value: "{{ .Values.ganache_cli.port }}"
+    volumeMounts:
+      - mountPath: /.config
+        name: config-volume
+  volumes:
+    - name: config-volume
+      emptyDir: {}
+  restartPolicy: OnFailure
+{{- end }}

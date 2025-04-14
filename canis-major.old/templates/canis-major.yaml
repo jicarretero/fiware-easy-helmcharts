@@ -1,4 +1,4 @@
-{{ if .Values.canis_major.enabled }}
+{{ if .Values.canis_major.deploy }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -50,24 +50,4 @@ spec:
   - port: {{ .Values.canis_major.port }}
     protocol: TCP
     name: {{ .Values.canis_major.portName }}
-{{- end }}
-
----
-{{- if .Values.canis_major.ingress.enabled }}
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: {{ .Values.canis_major.service.name }}
-spec:
-  rules:
-  - host: {{ .Values.canis_major.ingress.host }}
-    http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: {{ .Values.canis_major.service.name }}
-            port: 
-              number: {{ .Values.canis_major.env.MICRONAUT_SERVER_PORT }}
 {{- end }}

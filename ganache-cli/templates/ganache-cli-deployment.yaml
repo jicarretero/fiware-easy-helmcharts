@@ -1,0 +1,46 @@
+{{ if .Values.ganache_cli.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.ganache_cli.label.name }}
+  labels:
+    name: {{ .Values.ganache_cli.label.name }}
+spec:
+  selector:
+    matchLabels:
+      name: {{ .Values.ganache_cli.label.name }}
+  template:
+    metadata:
+      labels:
+        name: {{ .Values.ganache_cli.label.name }}
+    spec:
+      containers:
+      - name: {{ .Values.ganache_cli.service.name }}
+        image: {{ .Values.ganache_cli.image }}
+        command: ["node"] 
+        args: 
+        - "/app/ganache-core.docker.cli.js"
+        - "ganache-cli"
+        - "-l"
+        - "8000000"
+        - "--gasPrice"
+        - "0"
+        - "--account"
+        - "'0x22aabb811efca4e6f4748bd18a46b502fa85549df9fa07da649c0a148d7d5530, 100000000000000000000'"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.ganache_cli.service.name }}
+  labels:
+    name: {{ .Values.ganache_cli.label.name }}
+spec:
+  type: ClusterIP
+  selector:
+      name: {{ .Values.ganache_cli.label.name }}
+  ports:
+  - port: {{ .Values.ganache_cli.port }}
+    protocol: TCP
+    name: {{ .Values.ganache_cli.portName }}
+{{- end }}

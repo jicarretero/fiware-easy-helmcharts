@@ -1,0 +1,22 @@
+ganache_cli:
+  enabled: true
+  service:
+    name: ganache-cli
+  label:
+    name: ganache-cli
+  image: trufflesuite/ganache-cli:latest
+  command: ganache-cli -l 8000000 --gasPrice 0 --account '0x22aabb811efca4e6f4748bd18a46b502fa85549df9fa07da649c0a148d7d5530, 100000000000000000000'
+  port: 8545
+  nodePort: 30545
+  portName: ganache-cli-port
+
+  aei_contract:
+    enabled: true
+    service:
+      name: aei-contract
+    label:
+      name: aei-contract
+    image: quay.io/wi_stefan/py-contract:latest
+    env:
+      RPC_ENDPOINT: ganache-cli
+      RPC_PORT: 8545

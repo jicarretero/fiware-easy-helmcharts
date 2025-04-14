@@ -27,11 +27,11 @@ spec:
           - name: ORIONLD_TROE
             value: "TRUE"
           - name: ORIONLD_TROE_USER
-            value: {{ .Values.timescale.username }}
+            value: {{ .Values.orionld.timescale.username }}
           - name: ORIONLD_TROE_PWD
-            value: {{ .Values.timescale.password }}
+            value: {{ .Values.orionld.timescale.password }}
           - name: ORIONLD_TROE_HOST
-            value: {{ .Values.timescale.service_name }}
+            value: {{ .Values.orionld.timescale.host }}
           {{- end}}
           args: 
             - -dbhost
@@ -44,6 +44,8 @@ spec:
             {{- if .Values.orionld.troe }}
             - -troe
             {{- end }}
+            - -port
+            - "{{ .Values.orionld.port }}"
           ports:
             - containerPort: {{ .Values.orionld.port }}
 

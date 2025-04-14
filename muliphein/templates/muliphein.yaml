@@ -1,0 +1,64 @@
+{{ if .Values.muliphein.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.muliphein.label.name }}
+  labels:
+    name: {{ .Values.muliphein.label.name }}
+spec:
+  selector:
+    matchLabels:
+      name: {{ .Values.muliphein.label.name }}
+  template:
+    metadata:
+      labels:
+        name: {{ .Values.muliphein.label.name }}
+    spec:
+      containers:
+      - name: {{ .Values.muliphein.service.name }}
+        image: {{ .Values.muliphein.image }}
+        env:
+        - name: CANIS_MAJOR_URL
+          value: {{ .Values.muliphein.env.CANIS_MAJOR_URL }}
+        - name: NGSILD_BROKER_URL
+          value: {{ .Values.muliphein.env.NGSILD_BROKER_URL }}
+        - name: DUMP_AS_CURL
+          value: "{{ .Values.muliphein.env.DUMP_AS_CURL }}"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.muliphein.service.name }}
+  labels:
+    name: {{ .Values.muliphein.label.name }}
+spec:
+  type: ClusterIP
+  selector:
+      name: {{ .Values.muliphein.label.name }}
+  ports:
+  - port: {{ .Values.muliphein.port }}
+    protocol: TCP
+    name: {{ .Values.muliphein.portName }}
+{{- end }}
+
+---
+{{- if .Values.muliphein.ingress.enabled }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ .Values.muliphein.service.name }}
+spec:
+  rules:
+  - host: {{ .Values.muliphein.ingress.host }}
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: {{ .Values.muliphein.service.name }}
+            port: 
+              number: 8080
+{{- end }}
+

@@ -1,19 +1,29 @@
+muliphein:
+  enabled: false
+
+ganache-cli:
+  enabled: false
+
+canis-major:
+  enabled: false
+
 orion-ld:
-  enabled: true
+  enabled: false
   orionld:
     label:
       name: orionld-p2code
+    service:
+      name: orionld
     image: quay.io/fiware/orion-ld:1.9.0
     mongodb:
       host: orionld-mongodb
-
 
 _mongodb_common: &mongodb_common
   mongo:
     image: dockers.fiware.org/mongo:5.0
 
 mongodb-orionld:
-  enabled: true
+  enabled: false
   <<: *mongodb_common
   mongo:
     deployment:
@@ -24,7 +34,7 @@ mongodb-orionld:
       name: mongodb-orionld-data-volume
 
 mongodb-iotajson:
-  enabled: true
+  enabled: false
   <<: *mongodb_common
   mongo:
     deployment:
@@ -47,4 +57,7 @@ iotagent-json:
   enabled: false
 
 iotagent-ul:
+  enabled: false
+
+vault-server:
   enabled: false

@@ -1,15 +1,14 @@
 apiVersion: v2
-name: canis-major
+name: ganache-cli
 version: 0.2.0
 appVersion: 0.1.0
 kubeVersion: ">= 1.19-0"
-home: https://github.com/FIWARE/CanisMajor.git
+home: https://github.com/FIWARE/context.Orion-LD
 description: A simple helm chart to show "running" this in Kubernetes.
 keywords:
   - fiware
   - orion-ld
   - orion
-  - canis-major
 sources:
   - https://github.com/FIWARE/context.Orion-LD
 maintainers:

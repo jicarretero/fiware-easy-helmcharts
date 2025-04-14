@@ -2,22 +2,22 @@ apiVersion: v2
 name: fiware-easy-deployment
 version: 0.2.0
 appVersion: 0.1.0
-kubeVersion: '>= 1.19-0'
+kubeVersion: ">= 1.19-0"
 home: https://github.com/FIWARE/context.Orion-LD
 description: A simple helm chart to show "running" this in Kubernetes.
 maintainers:
-- name: Jose Ignacio Carretero
-  email: joseignacio.carretero@fiware.org
+  - name: Jose Ignacio Carretero
+    email: joseignacio.carretero@fiware.org
 dependencies:
   - name: orion-ld
     version: "0.2.0"
     repository: "file://../orionld"
-    condition: orionld.enabled
+    condition: orion-ld.enabled
   - name: mongodb
     version: "0.2.0"
     repository: "file://../mongodb"
     alias: mongodb-orionld
-    condition: orionld-mongodb.enabled
+    condition: mongodb-orionld.enabled
   - name: mongodb
     version: "0.2.0"
     repository: "file://../mongodb"
@@ -43,3 +43,19 @@ dependencies:
     version: "0.2.0"
     repository: "file://../iotagent-ul"
     condition: iotagent-ul.enabled
+  - name: canis-major
+    version: "0.2.0"
+    repository: "file://../canis-major"
+    condition: canis-major.enabled
+  - name: muliphein
+    version: "0.2.0"
+    repository: "file://../muliphein"
+    condition: muliphein.enabled
+  - name: ganache-cli
+    version: "0.2.0"
+    repository: "file://../ganache-cli"
+    condition: ganache-cli.enabled
+  - name: vault-server
+    version: "0.2.0"
+    repository: "file://../vault-server"
+    condition: vault-server.enabled

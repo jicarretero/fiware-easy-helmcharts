@@ -23,5 +23,17 @@ dependencies:
 - name: iotagent-ul
   repository: file://../iotagent-ul
   version: 0.2.0
-digest: sha256:504adfc99f9b50b1de06e1428fd557f5101eb4a7ca5b74268fb4dda65702e50f
-generated: "2025-04-04T11:38:27.245475479Z"
+- name: canis-major
+  repository: file://../canis-major
+  version: 0.2.0
+- name: muliphein
+  repository: file://../muliphein
+  version: 0.2.0
+- name: ganache-cli
+  repository: file://../ganache-cli
+  version: 0.2.0
+- name: vault-server
+  repository: file://../vault-server
+  version: 0.2.0
+digest: sha256:b3491ba26a099f4f3969f09a9d130bd14410f43012a0a0e690d46b844bc2a5fc
+generated: "2025-04-11T13:46:28.744582357+02:00"
