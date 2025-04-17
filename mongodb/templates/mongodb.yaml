@@ -13,7 +13,7 @@ spec:
     type: RollingUpdate 
   template:
     metadata:
-      name: mongo-db
+      name: {{ .Values.mongo.cname }}
       labels:
         name: {{ .Values.mongo.label.name }}
     spec:
@@ -22,7 +22,7 @@ spec:
         kubernetes.io/hostname: {{ .Values.mongo.volume.node }}
       {{- end }}
       containers:
-        - name: mongo-db
+        - name: {{ .Values.mongo.cname }}
           image: {{ .Values.mongo.image }}
           imagePullPolicy: IfNotPresent
           args: ["--nojournal"]

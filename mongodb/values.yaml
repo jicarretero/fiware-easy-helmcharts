@@ -1,9 +1,10 @@
 mongo:
   enabled: true
   label:
-    name: mongodb-rs
+    name: mongodb
   deployment:
     name: mongodb
+  cname: mongodb
   dbhost: mongodb
   dbport: 27017
   image: mongo:5.0
@@ -18,5 +19,4 @@ mongo:
     # persistentVolume - in case we set isVolumeClaim to True
     claimName: mongo-data-pvc
   service:
-     name: mongodb
-
+    name: mongodb

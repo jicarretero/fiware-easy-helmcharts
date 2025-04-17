@@ -1,24 +1,37 @@
-## 
+##
 # Mosquitto MQTT configuration
 iotagent_json:
   label:
-    name: iotagent_json
+    name: iotagent-json
+  metadata:
+    name: iotagent-json
   iota_httpport: 7896
   iota_node_httpport: 30896
-  iota_url_port: 4041
-  iota_url_node_port: 30041
-  iota_url: http://iotagent-json:4041
+  iota_config_port: 4041
+  iota_config_node_port: 30041
+  iota_provider_url: http://iotagent-json:4041
   iota_default_resource: /iot/json
   allow_anonymous: true
   image: quay.io/fiware/iotagent-json:latest
-  cpu_requests: 50m
-  cpu_limit: 500m
-  memory_limit: 256Mi
   mongodb_host: mongodb
   mongodb_db: iotagentjson
   orionld_host: orion-ld-service
   orionld_port: 1026
   iota_ld_context: http://context/user-context.jsonld
-  ingress: true
+  iota_fallback_tenant: openiot
+  ingress:
+    enabled: true
+    host: iotagentjson.apps-crc.testing
   service:
     hostname: iotagentjson.apps-crc.testing
+    name: iotagent-json
+  sidecar:
+    enabled: false
+    image: quay.io/fiware/tutorials.forwarder
+    name: canismajor-sidecar
+    port: 1026
+    broker_url: http://orion-ld-service:1026
+    debug: true
+    wallet:
+      token: some-wallet-value
+      address: some-wallet-address

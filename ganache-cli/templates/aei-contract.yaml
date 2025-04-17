@@ -11,7 +11,12 @@ spec:
     - name: RPC_ENDPOINT
       value: "{{ .Values.ganache_cli.service.name }}"
     - name: RPC_PORT
+      {{ if .Values.ganache_cli.sidecar.enabled }}
+      value: "{{ .Values.ganache_cli.sidecar.port }}"
+      {{ else }}
       value: "{{ .Values.ganache_cli.port }}"
+      {{- end }}
+
     volumeMounts:
       - mountPath: /.config
         name: config-volume

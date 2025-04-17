@@ -1,26 +1,31 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: iotagent-json
+  name: {{ .Values.iotagent_json.metadata.name }}
+  labels:
+    name: {{ .Values.iotagent_json.label.name }}
+  
 spec:
   selector:
     matchLabels:
-      app: iotagent-json
+      name: {{ .Values.iotagent_json.label.name }}
   template:
     metadata:
+      name: {{ .Values.iotagent_json.metadata.name }}
       labels:
-        app: iotagent-json
+        name: {{ .Values.iotagent_json.label.name }}
     spec:
       containers:
       - name: iotagent-json
         image: {{ .Values.iotagent_json.image }}
+        imagePullPolicy: Always
         env:
         - name: IOTA_CB_HOST
           value: "{{ .Values.iotagent_json.orionld_host }}"
         - name: IOTA_CB_PORT
           value: "{{ .Values.iotagent_json.orionld_port }}"
         - name: IOTA_NORTH_PORT
-          value: "{{ .Values.iotagent_json.iota_url_port }}"
+          value: "{{ .Values.iotagent_json.iota_config_port }}"
         - name: IOTA_REGISTRY_TYPE
           value: mongodb
         - name: IOTA_LOG_LEVEL
@@ -40,21 +45,36 @@ spec:
         - name: IOTA_HTTP_PORT
           value: "{{ .Values.iotagent_json.iota_httpport }}"
         - name: IOTA_PROVIDER_URL
-          value: "{{ .Values.iotagent_json.iota_url }}"
+          value: "{{ .Values.iotagent_json.iota_provider_url }}"
         - name: IOTA_DEFAULT_RESOURCE
           value: "{{ .Values.iotagent_json.iota_default_resource }}"
         - name: IOTA_JSON_LD_CONTEXT
           value: "{{ .Values.iotagent_json.iota_ld_context }}"
         - name: IOTA_FALLBACK_TENANT
-          value: openiot
+          value: "{{ .Values.iotagent_json.iota_fallback_tenant }}"
         - name: IOTA_MULTI_CORE
           value: "true"
-        # resources:
-        #  requests:
-        #    cpu: "{{ .Values.iotagent_json.cpu_requests }}"
-        #  limits:
-        #    memory: "{{ .Values.iotagent_json.memory_limit }}"
-        #    cpu: "{{ .Values.iotagent_json.cpu_limit }}"
         ports:
-        - containerPort: {{ .Values.iotagent_json.iota_url_port }}
+        - containerPort: {{ .Values.iotagent_json.iota_config_port }}
         - containerPort: {{ .Values.iotagent_json.iota_httpport }}
+      {{ if .Values.iotagent_json.sidecar.enabled }}
+      - name: {{ .Values.iotagent_json.sidecar.name }}
+        image: {{ .Values.iotagent_json.sidecar.image }}
+        env:
+        - name: CONTEXT_BROKER
+          value: {{ .Values.iotagent_json.sidecar.broker_url }}
+        - name: WALLET_TYPE
+          value: vault
+        - name: WALLET_TOKEN
+          value: {{ .Values.iotagent_json.sidecar.wallet.token }}
+        - name: WALLET_ADDRESS
+          value: {{ .Values.iotagent_json.sidecar.wallet.address }}
+        - name: ACCEPT_ENCODING
+          value: "identity"
+        - name: PORT
+          value: "{{ .Values.iotagent_json.sidecar.port }}"
+        {{ if .Values.iotagent_json.sidecar.debug }}
+        - name: DEBUG
+          value: "broker:*"
+        {{- end}}
+      {{- end }}

@@ -9,6 +9,11 @@ ganache_cli:
   port: 8545
   nodePort: 30545
   portName: ganache-cli-port
+  sidecar:
+    enabled: false
+    name: cselect-sidecar
+    port: 4141
+    image: dockers.fiware.org/alpine-select:1.0.0
 
   aei_contract:
     enabled: true

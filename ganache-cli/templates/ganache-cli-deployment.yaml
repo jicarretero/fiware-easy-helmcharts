@@ -27,6 +27,16 @@ spec:
         - "0"
         - "--account"
         - "'0x22aabb811efca4e6f4748bd18a46b502fa85549df9fa07da649c0a148d7d5530, 100000000000000000000'"
+        - "-p" 
+        - "{{ .Values.ganache_cli.port }}"
+      {{ if .Values.ganache_cli.sidecar.enabled }}
+      - name: {{ .Values.ganache_cli.sidecar.name }}
+        image: {{ .Values.ganache_cli.sidecar.image }}
+        args:
+          - 127.0.0.1
+          - "{{ .Values.ganache_cli.port }}"
+          - "{{ .Values.ganache_cli.sidecar.port }}"
+      {{- end }}
 
 ---
 apiVersion: v1
@@ -40,7 +50,11 @@ spec:
   selector:
       name: {{ .Values.ganache_cli.label.name }}
   ports:
+  {{ if .Values.ganache_cli.sidecar.enabled }}
+  - port: {{ .Values.ganache_cli.sidecar.port }}
+  {{- else }}
   - port: {{ .Values.ganache_cli.port }}
+  {{- end }}
     protocol: TCP
     name: {{ .Values.ganache_cli.portName }}
 {{- end }}
