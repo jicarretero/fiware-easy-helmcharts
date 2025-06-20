@@ -13,10 +13,12 @@ spec:
     nodePort: {{ .Values.iotagent_json.iota_config_node_port }}
     protocol: TCP
     name: iota-config-port
+  {{ if .Values.iotagent_json.transport.http }}
   - port: {{ .Values.iotagent_json.iota_httpport }}
     nodePort: {{ .Values.iotagent_json.iota_node_httpport }}
     protocol: TCP
     name: iota-httpport
+  {{ end }}
 
 ---
 {{- if .Values.iotagent_json.ingress.enabled }}

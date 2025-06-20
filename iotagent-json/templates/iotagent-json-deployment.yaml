@@ -42,8 +42,22 @@ spec:
           value: "27017"
         - name: IOTA_MONGO_DB
           value: "{{ .Values.iotagent_json.mongodb_db }}"
+        {{ if .Values.iotagent_json.transport.http }}
         - name: IOTA_HTTP_PORT
           value: "{{ .Values.iotagent_json.iota_httpport }}"
+        {{ end }}
+        {{ if .Values.iotagent_json.transport.mqtt }}
+        - name: IOTA_MQTT_PORT
+          value: "{{ .Values.iotagent_json.iota_mqtt_port }}"
+        - name: IOTA_MQTT_HOST
+          value: "{{ .Values.iotagent_json.iota_mqtt_host }}"
+        {{ if hasKey .Values.iotagent_json "iot_mqtt_username" }}
+        - name: IOTA_MQTT_USERNAME
+          value: "{{ .Values.iotagent_json.iota_mqtt_username }}"
+        - name: IOTA_MQTT_PASSWORD
+          value: "{{ .Values.iotagent_json.iota_mqtt_password }}"
+        {{ end }}
+        {{ end }}
         - name: IOTA_PROVIDER_URL
           value: "{{ .Values.iotagent_json.iota_provider_url }}"
         - name: IOTA_DEFAULT_RESOURCE

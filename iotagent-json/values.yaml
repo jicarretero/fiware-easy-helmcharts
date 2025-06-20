@@ -5,8 +5,15 @@ iotagent_json:
     name: iotagent-json
   metadata:
     name: iotagent-json
+  transport:
+    http: true
+    mqtt: false
   iota_httpport: 7896
   iota_node_httpport: 30896
+  iota_mqtt_host: localhost
+  iota_mqtt_port: 1883
+  # iota_mqtt_username: foo
+  # iota_mqtt_password: pass
   iota_config_port: 4041
   iota_config_node_port: 30041
   iota_provider_url: http://iotagent-json:4041
