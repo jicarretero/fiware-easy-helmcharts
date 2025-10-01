@@ -35,11 +35,13 @@ metadata:
   labels:
     name: {{ .Values.vault_server.label.name }}
 spec:
-  type: ClusterIP
+  # type: ClusterIP
+  type: NodePort
   selector:
       name: {{ .Values.vault_server.service.name }}
   ports:
   - port: {{ .Values.vault_server.port }}
     protocol: TCP
     name: {{ .Values.vault_server.portName }}
+    nodePort: {{ .Values.vault_server.nodePort }}
 {{- end }}
