@@ -38,8 +38,14 @@ spec:
             - {{ .Values.orionld.mongodb.host }}
             - -logLevel
             - {{ .Values.orionld.loglevel }}
+            {{- if .Values.orionld.mongoconly }}
+            - -mongocOnly
+            {{- end }}
             {{- if .Values.orionld.experimental }}
             - -experimental
+            {{- end }}
+            {{- if .Values.orionld.forwarding }}
+            - -forwarding
             {{- end }}
             {{- if .Values.orionld.troe }}
             - -troe

@@ -1,5 +1,8 @@
 orionld:
   experimental: true
+  troe: false
+  mongocOnly: false
+  forwarding: false
   port: 1026
   exposedPort: 1026
   image: quay.io/fiware/orion-ld
@@ -9,7 +12,6 @@ orionld:
     name: orion-ld-service
     hostname: orion.k8s.fiware.org
   loglevel: DEBUG
-  troe: false
   timescale:
     username: orion
     password: orion
