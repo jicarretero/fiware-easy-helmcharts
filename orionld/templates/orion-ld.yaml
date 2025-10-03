@@ -46,6 +46,8 @@ spec:
             {{- end }}
             {{- if .Values.orionld.forwarding }}
             - -forwarding
+            - -wip
+            - entityMaps
             {{- end }}
             {{- if .Values.orionld.troe }}
             - -troe
