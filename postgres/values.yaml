@@ -1,0 +1,27 @@
+timescale:
+  enabled: true
+  port: 5432
+  host_auth_method: trust
+  image: timescale/timescaledb-postgis:latest-pg12
+  service_name: timescale
+  username: orion
+  password: orion
+  persistence:
+    enabled: true
+    storageClassName: crc-csi-hostpath-provisioner
+    storage: "1Gi"
+  volume:
+    name: timescale-volume
+    isHostPath: false
+    isVolumeClaim: false
+    mountPath: /var/lib/postgresql
+
+    # Host path - used in case we are using Host path as volume
+    hostPath: /tmp/timescale-data
+
+    # persistentVolume - in case we set isVolumeClaim to True
+    claimName: timescale-data-pvc
+
+    # The next are ready to be deployed
+    selectNode: false
+    node: k8s-node-03

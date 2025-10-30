@@ -24,6 +24,8 @@ spec:
           value: {{ .Values.muliphein.env.NGSILD_BROKER_URL }}
         - name: DUMP_AS_CURL
           value: "{{ .Values.muliphein.env.DUMP_AS_CURL }}"
+        - name: PSQL_URL
+          value: "{{ .Values.muliphein.env.PSQL_URL }}"
 
 ---
 apiVersion: v1
